@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      body {
+        margin: 0px;
+        background-color: #F5F5F5;
+      }
+
+      .point {
+        position: absolute;
+        height: 2px;
+        width: 2px;
+        border-radius: 1px;
+        background-color: black;
+      }
+
+      #frame {
+        position: absolute;
+        background-color: white;
+        overflow: hidden;
+        border: 1px solid #E5E5E5;
+        box-sizing: border-box;
+      }
+      .slidecontainer {
+        width: 100%; /* Width of the outside container */
+      }
+
+      /* The slider itself */
+      .slider {
+        position: absolute;
+        -webkit-appearance: none;  /* Override default CSS styles */
+        appearance: none;
+        width: 300px;
+        height: 25px; /* Specified height */
+        background: #d3d3d3; /* Grey background */
+        outline: none; /* Remove outline */
+        opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+        -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+        transition: opacity .2s;
+        margin: 0px;
+        border-radius: 0px;
+      }
+
+      /* Mouse-over effects */
+      .slider:hover {
+        opacity: 1; /* Fully shown on mouse-over */
+      }
+
+      /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+        width: 25px; /* Set a specific slider handle width */
+        height: 25px; /* Slider handle height */
+        background: #4CAF50; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+        border: 0px;
+      }
+
+      .slider::-moz-range-thumb {
+        width: 25px; /* Set a specific slider handle width */
+        height: 25px; /* Slider handle height */
+        background: #4CAF50; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="frame"></div>
+    <div class="slidecontainer">
+      <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
+    </div>
+    <script src="ortho.js"></script>
+  </body>
+</html>
