@@ -6,6 +6,7 @@ function getX(C, D, N, B) {
   let denominator = (c_3*d_2*n_1 - c_2*d_3*n_1 - c_3*d_1*n_2 + c_1*d_3*n_2 + c_2*d_1*n_3 - c_1*d_2*n_3);
   let numerator = -(-b_3*d_2*n_1 + b_2*d_3*n_1 + b_3*d_1*n_2 - b_1*d_3*n_2 - b_2*d_1*n_3 + b_1*d_2*n_3);
   let x = numerator/denominator;
+  
   return x;
 }
 
