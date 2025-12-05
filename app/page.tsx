@@ -5,8 +5,13 @@ import {useEffect, useRef, useState} from "react"
 import styled from "styled-components"
 
 export default function Page() {
-  const [angle, setAngle] = useState(0)
-  const [rotation, setRotation] = useState(0)
+  const [state, setState] = useState({
+    angle: 0,
+    rotation: 0,
+    focX: 0,
+    focY: 0,
+    focZ: 0
+  })
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -14,14 +19,14 @@ export default function Page() {
     if (!ref.current) return
     if (typeof document !== 'object') return
     ref.current.innerHTML = ''
-    for (let i = 0; i < cube.length; i++) {
-      const j = angle/100
-      const p = rotation/100
+    for (let i = 0; i < currentShape.length; i++) {
+      const j = state.angle/100
+      const p = state.rotation/100
 
       const angleRad = 2*Math.PI*j
-      const Ma = add([125,125, 100], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
-
-      const [X, Y] = projectPoint(cube[i], O, Ma, G, p, 200, 200)
+      const Ma = add([0,0, 0], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
+      const O: TVector = [state.focX, state.focY, state.focZ]
+      const [X, Y] = projectPoint(currentShape[i], O, Ma, G, p, 200, 200)
       const point = document.createElement('DIV')
 
       point.className = 'point'
@@ -29,7 +34,7 @@ export default function Page() {
       point.style.bottom = Y + 'px'
       ref.current?.appendChild(point)
     }
-  }, [angle, rotation])
+  }, [state])
 
   return (
     <Frame>
@@ -40,17 +45,26 @@ export default function Page() {
         background: '#e9e9e9'
       }}/>
       <div>
-        Radians: {(angle/100).toFixed(2)}τ
+        Radians: {(state.angle/100).toFixed(2)}τ
       </div><br/>
       <Slider
-        onChange={({target}) => setAngle(parseInt(target.value))}
-        type='range' min={0} max={100} step={1} value={angle}/>
+        onChange={({target}) => setState((p) => ({...p, angle: parseInt(target.value)}))}
+        type='range' min={0} max={100} step={1} value={state.angle}/>
       <div>
-        Rotation: {(rotation/100).toFixed(2)}τ
+        Rotation: {(state.rotation/100).toFixed(2)}τ
       </div><br/>
       <Slider
-        onChange={({target}) => setRotation(parseInt(target.value))}
-        type='range' min={0} max={100} step={1} value={rotation}/>
+        onChange={({target}) => setState((p) => ({...p, rotation: parseInt(target.value)}))}
+        type='range' min={0} max={100} step={1} value={state.rotation}/>
+      <div>
+        FocusPoint: [{state.focX}, {state.focY}, {state.focZ}]
+      </div><br/>
+      <input type='number' value={state.focX} onChange={({target}) => setState((p) => ({...p, focX: parseFloat(target.value)}))}/>
+      <br/>
+      <input type='number' value={state.focY} onChange={({target}) => setState((p) => ({...p, focY: parseFloat(target.value)}))}/>
+      <br/>
+      <input type='number' value={state.focZ} onChange={({target}) => setState((p) => ({...p, focZ: parseFloat(target.value)}))}/>
+      <br/>
     </Frame>
   )
 }
@@ -70,30 +84,31 @@ const Slider = styled.input`
   width: 400px;
 `
 
-const O: TVector = [125, 125, 25]
 const G: TVector = [0, 0, 1]
 
-const cube: TVector[] = [
-  [100,100,0],
-  [100,100,25],
-  [100,100,50],
-  [100,125,0],
-  [100,125,50],
-  [100,150,0],
-  [100,150,25],
-  [100,150,50],
+const centerCube: TVector[] = [
+  [-25, -25, -25],
+  [-25, -25,   0],
+  [-25, -25,  25],
+  [-25,   0, -25],
+  [-25,   0,  25],
+  [-25,  25, -25],
+  [-25,  25,   0],
+  [-25,  25,  25],
 
-  [125,100,0],
-  [125,100,50],
-  [125,150,0],
-  [125,150,50],
+  [  0, -25, -25],
+  [  0, -25,  25],
+  [  0,  25, -25],
+  [  0,  25,  25],
 
-  [150,100,0],
-  [150,100,25],
-  [150,100,50],
-  [150,125,0],
-  [150,125,50],
-  [150,150,0],
-  [150,150,25],
-  [150,150,50],
+  [ 25, -25, -25],
+  [ 25, -25,   0],
+  [ 25, -25,  25],
+  [ 25,   0, -25],
+  [ 25,   0,  25],
+  [ 25,  25, -25],
+  [ 25,  25,   0],
+  [ 25,  25,  25],
 ]
+
+const currentShape = centerCube
