@@ -10,7 +10,10 @@ export default function Page() {
     rotation: 0,
     focX: 0,
     focY: 0,
-    focZ: 0
+    focZ: 0,
+    camX: 50,
+    camY: 50,
+    camZ: 50
   })
 
   const ref = useRef<HTMLDivElement>(null)
@@ -24,9 +27,10 @@ export default function Page() {
       const p = state.rotation/100
 
       const angleRad = 2*Math.PI*j
-      const Ma = add([0,0, 0], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
       const O: TVector = [state.focX, state.focY, state.focZ]
-      const [X, Y] = projectPoint(currentShape[i], O, Ma, G, p, 200, 200)
+      const C: TVector = add([0,0, 0], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
+
+      const [X, Y] = projectPoint(currentShape[i], O, C, G, p, 200, 200)
       const point = document.createElement('DIV')
 
       point.className = 'point'
@@ -45,7 +49,7 @@ export default function Page() {
         background: '#e9e9e9'
       }}/>
       <div>
-        Radians: {(state.angle/100).toFixed(2)}τ
+        Radians XY: {(state.angle/100).toFixed(2)}τ
       </div><br/>
       <Slider
         onChange={({target}) => setState((p) => ({...p, angle: parseInt(target.value)}))}
@@ -64,6 +68,16 @@ export default function Page() {
       <input type='number' value={state.focY} onChange={({target}) => setState((p) => ({...p, focY: parseFloat(target.value)}))}/>
       <br/>
       <input type='number' value={state.focZ} onChange={({target}) => setState((p) => ({...p, focZ: parseFloat(target.value)}))}/>
+      <br/>
+
+      <div>
+        CameraPoint: [{state.camX}, {state.camY}, {state.camZ}]
+      </div><br/>
+      <input type='number' value={state.camX} onChange={({target}) => setState((p) => ({...p, camX: parseFloat(target.value)}))}/>
+      <br/>
+      <input type='number' value={state.camY} onChange={({target}) => setState((p) => ({...p, camY: parseFloat(target.value)}))}/>
+      <br/>
+      <input type='number' value={state.camZ} onChange={({target}) => setState((p) => ({...p, camZ: parseFloat(target.value)}))}/>
       <br/>
     </Frame>
   )
