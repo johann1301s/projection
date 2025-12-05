@@ -6,6 +6,8 @@ import styled from "styled-components"
 
 export default function Page() {
   const [angle, setAngle] = useState(0)
+  const [rotation, setRotation] = useState(0)
+
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -14,10 +16,12 @@ export default function Page() {
     ref.current.innerHTML = ''
     for (let i = 0; i < cube.length; i++) {
       const j = angle/100
+      const p = rotation/100
+
       const angleRad = 2*Math.PI*j
       const Ma = add([125,125, 100], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
 
-      const [X, Y] = projectPoint(cube[i], O, Ma, G, 0, 200, 200)
+      const [X, Y] = projectPoint(cube[i], O, Ma, G, p, 200, 200)
       const point = document.createElement('DIV')
 
       point.className = 'point'
@@ -25,7 +29,7 @@ export default function Page() {
       point.style.bottom = Y + 'px'
       ref.current?.appendChild(point)
     }
-  }, [angle])
+  }, [angle, rotation])
 
   return (
     <Frame>
@@ -35,9 +39,18 @@ export default function Page() {
         height: '200px',
         background: '#e9e9e9'
       }}/>
+      <div>
+        Radians: {(angle/100).toFixed(2)}τ
+      </div><br/>
       <Slider
         onChange={({target}) => setAngle(parseInt(target.value))}
         type='range' min={0} max={100} step={1} value={angle}/>
+      <div>
+        Rotation: {(rotation/100).toFixed(2)}τ
+      </div><br/>
+      <Slider
+        onChange={({target}) => setRotation(parseInt(target.value))}
+        type='range' min={0} max={100} step={1} value={rotation}/>
     </Frame>
   )
 }
