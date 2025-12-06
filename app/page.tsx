@@ -21,10 +21,28 @@ export default function Page() {
     for (let i = 0; i < currentShape.length; i++) {
       const p = state.rotation/100
 
-      const [X, Y] = projectPoint(currentShape[i], state.O, state.C, G, p, 200, 200)
+      const P = currentShape[i]
+
+      const [X, Y] = projectPoint(P, state.O, state.C, G, p, 200, 200)
       
       const point = document.createElement('DIV')
       point.className = 'point'
+      point.dataset.x = P[0].toString()
+      point.dataset.y = P[1].toString()
+      point.dataset.z = P[2].toString()
+      point.onclick = (event) => {
+        const el = event.target as HTMLDivElement
+
+        setState((p) => ({
+          ...p,
+          O: [
+            Number(el.dataset.x),
+            Number(el.dataset.y),
+            Number(el.dataset.z),
+          ]
+        }))
+      }
+
       point.style.left = X + 'px'
       point.style.bottom = Y + 'px'
       ref.current?.appendChild(point)
