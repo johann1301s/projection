@@ -145,7 +145,7 @@ const currentShape = centerCube
 const createCameraFromAngle = (angle: number) => {
   const j = angle/100
   const angleRad = 2*Math.PI*j
-  const C: TVector = add([0,0, 0], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
+  const C: TVector = add([0,0, 25], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
   
   return C
 }
