@@ -5,10 +5,11 @@ import {useEffect, useRef, useState} from "react"
 import styled from "styled-components"
 
 export default function Page() {
+  const initalAngle = 0
   const [state, setState] = useState({
-    angle: 0,
+    angle: initalAngle,
     rotation: 0,
-    C: [50, 50, 50] as TVector,
+    C: createCameraFromAngle(initalAngle),
     O: [0,0,0] as TVector
   })
 
@@ -49,11 +50,8 @@ export default function Page() {
     }
   }, [state])
 
-  const onAngleChange = (value: string) => {
-    const angle = parseInt(value)
-    const j = angle/100
-    const angleRad = 2*Math.PI*j
-    const C: TVector = add([0,0, 0], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
+  const onAngleChange = (angle: number) => {
+    const C = createCameraFromAngle(angle)
 
     setState((p) => ({
       ...p,
@@ -74,7 +72,7 @@ export default function Page() {
         Radians XY: {(state.angle/100).toFixed(2)}τ
       </div><br/>
       <Slider
-        onChange={({target}) => onAngleChange(target.value)}
+        onChange={({target}) => onAngleChange(parseInt(target.value))}
         type='range' min={0} max={100} step={1} value={state.angle}/>
       <div>
         Rotation: {(state.rotation/100).toFixed(2)}τ
@@ -134,3 +132,11 @@ const centerCube: TVector[] = [
 ]
 
 const currentShape = centerCube
+
+const createCameraFromAngle = (angle: number) => {
+  const j = angle/100
+  const angleRad = 2*Math.PI*j
+  const C: TVector = add([0,0, 0], multiply([Math.cos(angleRad), Math.sin(angleRad),0], Math.sqrt(2*125*125)))
+  
+  return C
+}
