@@ -5,9 +5,9 @@ import {useEffect, useRef, useState} from "react"
 import styled from "styled-components"
 
 export default function Page() {
-  const initalAngle = 0
+  const initalAngle = 20
   const [state, setState] = useState({
-    angle: initalAngle,
+    angleXY: initalAngle,
     rotation: 0,
     C: createCameraFromAngle(initalAngle),
     O: [0,0,0] as TVector
@@ -56,7 +56,7 @@ export default function Page() {
     setState((p) => ({
       ...p,
       C: C,
-      angle: angle
+      angleXY: angle
     }))
   }
 
@@ -68,28 +68,37 @@ export default function Page() {
         height: '200px',
         background: '#e9e9e9'
       }}/>
-      <div>
-        Radians XY: {(state.angle/100).toFixed(2)}τ
-      </div><br/>
-      <Slider
-        onChange={({target}) => onAngleChange(parseInt(target.value))}
-        type='range' min={0} max={100} step={1} value={state.angle}/>
-      <div>
-        Rotation: {(state.rotation/100).toFixed(2)}τ
-      </div><br/>
+      <div style={{background: '#ececec'}}>
+        <div>
+          Radians XY: {(state.angleXY/100).toFixed(2)}τ
+        </div><br/>
+        <Slider
+          onChange={({target}) => onAngleChange(parseInt(target.value))}
+          type='range' min={0} max={100} step={1} value={state.angleXY}/>
+      </div>
 
-      <Slider
-        onChange={({target}) => setState((p) => ({...p, rotation: parseInt(target.value)}))}
-        type='range' min={0} max={100} step={1} value={state.rotation}/>
+      <div style={{background: '#ececec'}}>
+        <div>
+          Rotation: {(state.rotation/100).toFixed(2)}τ
+        </div><br/>
+        <Slider
+          onChange={({target}) => setState((p) => ({...p, rotation: parseInt(target.value)}))}
+          type='range' min={0} max={100} step={1} value={state.rotation}/>
+      </div>
 
-      <div>
-        CameraPoint: [{state.C[0].toFixed(2)}, {state.C[1].toFixed(2)}, {state.C[2].toFixed(2)}]
+      <div style={{background: '#ececec'}}>
+        <div>
+          🎥 CameraPoint: [{state.C[0].toFixed(2)}, {state.C[1].toFixed(2)}, {state.C[2].toFixed(2)}]
+        </div>
       </div>
     </Frame>
   )
 }
 
 const Frame = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   .point {
     position: absolute;
     height: 2px;
